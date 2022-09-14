@@ -9,6 +9,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.function.Predicate;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -30,4 +32,10 @@ public class SwaggerConfig {
                 .version("1.0")
                 .build();
     }
+
+
+
+
+
+
 }
