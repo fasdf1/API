@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
-/*@AllArgsConstructor*/
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Category {

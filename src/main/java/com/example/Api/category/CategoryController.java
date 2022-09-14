@@ -5,7 +5,6 @@ import com.example.Api.category.dto.CategoryPostDto;
 import com.example.Api.category.mapper.CategoryMapper;
 import com.example.Api.response.SingleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,14 @@ import javax.validation.Valid;
 public class CategoryController {
 
     private final int size = 10;
-    CategoryMapper categoryMapper;
+   private final CategoryMapper categoryMapper;
+   private final CategoryRepository categoryRepository;
+
+    public CategoryController(CategoryMapper categoryMapper, CategoryRepository categoryRepository) {
+        this.categoryMapper = categoryMapper;
+        this.categoryRepository = categoryRepository;
+    }
+
     @Operation(summary = "", description = "hello api example")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK !!"),
@@ -30,11 +36,14 @@ public class CategoryController {
 
 
     // 카테고리 등록
+
+
     @PostMapping
     public ResponseEntity registerCategory(@Valid @RequestBody CategoryPostDto categoryPostDto) {
 
         Category category = categoryMapper.categoryPostDtoToCategory(categoryPostDto);
 
+categoryRepository.save(category);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(categoryMapper.categoryToCategoryResponseDto(category)),
                 HttpStatus.CREATED);
