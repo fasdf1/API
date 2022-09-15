@@ -27,7 +27,7 @@ public class memberController {
 
     @GetMapping()
     public ResponseEntity userpage(){
-        Member member1 = new Member(1,"멤버네임","이메일","1234");
+        Member member1 = new Member();
         Member member2 = new Member();
         return new ResponseEntity<>(member1,HttpStatus.ACCEPTED);
     }
