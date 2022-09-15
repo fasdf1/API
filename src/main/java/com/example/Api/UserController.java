@@ -32,7 +32,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity userpage(){
-        Member member1 = new Member(1L,"홍길동","1234");
+        Member member1 = new Member(1,"대충 이메일 적어","홍길동","1234");
         return new ResponseEntity<>(member1,HttpStatus.ACCEPTED);
     }
 }
