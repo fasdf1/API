@@ -22,9 +22,10 @@ public class Member {
     private long id;
     //@Email
     
-    private String memberName; //이렇게하고 이메일 그냥 받으면 됨
+    private String nickName;
     private String email;
     private String password;
+    private String roles;
 
 
 
