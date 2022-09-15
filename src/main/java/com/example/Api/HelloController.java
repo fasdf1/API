@@ -1,6 +1,7 @@
 package com.example.Api;
 
 import com.example.Api.member.Member;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +23,7 @@ public class HelloController {
 
 
     @GetMapping("/hello")
+    @ApiOperation(value = "멤버 조회",notes = "추가 적인 메모는 이렇게 추가")
     public ResponseEntity<Member> hello(@Parameter(description = "이름", required = true, example = "Park") @RequestParam String name) {
         Member member = new Member();
 
