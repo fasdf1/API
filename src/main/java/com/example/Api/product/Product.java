@@ -1,4 +1,4 @@
-package com.example.Api;
+package com.example.Api.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

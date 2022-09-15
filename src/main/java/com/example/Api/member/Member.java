@@ -1,4 +1,4 @@
-package com.example.Api;
+package com.example.Api.member;
 
 import lombok.*;
 import nonapi.io.github.classgraph.json.Id;
@@ -22,8 +22,8 @@ public class Member {
     private long id;
     //@Email
     
-    private String userName; //이렇게하고 이메일 그냥 받으면 됨
-    private String nickName;
+    private String memberName; //이렇게하고 이메일 그냥 받으면 됨
+    private String email;
     private String password;
 
 

@@ -1,5 +1,6 @@
 package com.example.Api;
 
+import com.example.Api.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,8 +29,9 @@ public class HelloController {
     }
 
     @PostMapping("/hello")
-    public String hello2( String key) {
-        return key;
+    public ResponseEntity<Member> hello2(Member member) {
+
+        return ResponseEntity.ok(member);
     }
 
     @GetMapping
