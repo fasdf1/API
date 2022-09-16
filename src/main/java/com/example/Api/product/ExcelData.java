@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ExcelData {
 
-    private long productId;
+    private long id;
     private String imageURL; // 이미지 URL
     private String productName;
     private BigDecimal price;
