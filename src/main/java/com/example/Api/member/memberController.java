@@ -42,10 +42,12 @@ return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
 
+
     @GetMapping("/{member-id}")
     @ApiOperation(value = "마이 페이지")// 유저 상세 페이지
     public ResponseEntity memberPage(@PathVariable("member-id") @Positive long Id){
 //        Member member1 = new Member(1,"멤버네임","이메일","1234");
+
         Member member2 = new Member();
         return new ResponseEntity<>(member2,HttpStatus.ACCEPTED);
     }
