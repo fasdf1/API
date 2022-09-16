@@ -88,16 +88,30 @@ public class ProductController {
             data.setProductId(i);
             data.setImageURL(row.getCell(0).getStringCellValue());
             data.setProductName(row.getCell(1).getStringCellValue());
-            String priceValue = row.getCell(2).getStringCellValue().replaceAll(",","");
-            // 크롤링한 가격은 텍스트 형식으로 되어 있는 숫자, 3,500에 있는 , 제거
-           /* String priceValue2 = priceValue.replaceAll(",","");*/
-            long  price = Long.parseLong(priceValue);
+            /*String priceValue = row.getCell(2).getStringCellValue().replaceAll(",","");*/
+            String priceValue = row.getCell(2).getStringCellValue();
+            String parsedValue = "";
+            long price = 0;
+            // 크롤링한 가격은 텍스트 형식으로 되어 있는 숫자, 문자열 가격에 "원"이나 ","가 있으면 모두 제거
+            if(priceValue.contains(",") || priceValue.contains("원")){
+                parsedValue = priceValue.replaceAll("[,원]","");
+                System.out.println(parsedValue);
+                price = Long.parseLong(parsedValue);
+               /* System.out.println(price);*/
+            }
+            else{
+                price = Long.parseLong(priceValue);
+                /*System.out.println(price);*/
+            }
+
             BigDecimal seq = new BigDecimal(price);
             data.setCategoryId((long)row.getCell(3).getNumericCellValue());
             data.setCompany(row.getCell(4).getStringCellValue());
             data.setPrice(seq);
             data.setCreatedAt(LocalDateTime.now());
             dataList.add(data);
+
+            //중복 삼품인지 검사 필요
             Product product = productMapper.excelDataToProduct(data);
             product.setId(data.getProductId());
             productList.add(product);
