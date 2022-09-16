@@ -38,7 +38,7 @@ public class memberController {
     public ResponseEntity update(@PathVariable("member-id") @Positive long Id,
                                  @Valid @RequestBody Member member){
 
-        return new ResponseEntity<>(member, HttpStatus.OK);
+return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
 
