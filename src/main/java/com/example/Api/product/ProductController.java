@@ -41,6 +41,7 @@ public class ProductController {
         this.productService = productService;
 
     }
+    //url/2
 
 
     /*

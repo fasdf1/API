@@ -14,10 +14,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/member")
+@Validated
 public class memberController {
 
+    private final MemberService memberService;
 
-
+    public memberController(MemberService memberService){
+        this.memberService = memberService;
+    }
+/*
     // 5. 유저 삭제 (회원 탈퇴)
 
 
@@ -63,5 +68,5 @@ return new ResponseEntity<>(member, HttpStatus.OK);
     public ResponseEntity memberDelete(@PathVariable("member-id") @Positive long Id){
         return new ResponseEntity<>(HttpStatus.OK);
 
-    }
+    }*/
 }
