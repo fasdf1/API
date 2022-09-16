@@ -1,2 +1,7 @@
-package com.example.Api.member;public class MemberService {
+package com.example.Api.member;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class MemberService {
 }
