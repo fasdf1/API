@@ -2,11 +2,8 @@ package com.example.Api.member;
 
 import com.example.Api.category.Category;
 import lombok.*;
-import nonapi.io.github.classgraph.json.Id;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -17,20 +14,24 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Member {
-
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     //@Email
+    @Column
     private String email;
+    @Column
     private String nickName;
+    @Column
     private String password;
+    @Column
     private String role;
 
-    private Category category = null;
+   /* private Category category = null;*/
 
 //    private List<productHearts> productHearts = new ArrayList<>();
 //    private List<reviewHearts> reviewHearts = new ArrayList<>();
