@@ -50,4 +50,14 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+
+   /* @Override
+    public int compareTo(Product product) {
+        if (product.hearts < hearts) {
+            return 1;
+        } else if (product.hearts > hearts) {
+            return -1;
+        }
+        return 0;
+    }*/
 }

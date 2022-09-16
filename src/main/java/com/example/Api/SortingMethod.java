@@ -18,4 +18,8 @@ public enum SortingMethod {
     SortingMethod(int methodId){
         this.methodId = methodId;
     }
+
+    public int getMethodId() {
+        return methodId;
+    }
 }
