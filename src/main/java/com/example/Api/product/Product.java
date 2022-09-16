@@ -1,5 +1,6 @@
 package com.example.Api.product;
 
+import com.example.Api.audit.Auditable;
 import com.example.Api.category.Category;
 import com.example.Api.review.Review;
 import lombok.AllArgsConstructor;
@@ -8,9 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,30 +17,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
+/*@AllArgsConstructor*/
 @NoArgsConstructor
-public class Product {
+@Entity
+public class Product extends Auditable {
 
     /*
     연관 관계
     member (1)  : productHeart ( N ) : product(1)  //상품 좋아요 기능
      */
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
     private String imageURL; // 이미지 URL
+    @Column
     private String productName;
+    @Column
     private BigDecimal price;
     //( member (1) ) : category (1) : product (N) // 상품 추천 기능
+    @Column
     private long categoryId;
+    @Column
     private  String company;
+    @Column
     private long views = 0;
+    @Column
     private long hearts = 0;
+    @Column
     private long reviews = 0;
 
-    private Category category;
+    /*private Category category;
 
     //product(1) : review (N) // 상품에 대한 리뷰 작성 기능
-    private List<Review> reviewList = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();*/
 
     //member (1)  : productHeart ( N ) : product(1)  //상품 좋아요 기능
     // 회원 기준으로 좋아요한 상품 출력만 구현할 예정
