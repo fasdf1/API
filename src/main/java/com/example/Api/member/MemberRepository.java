@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
-
+    public Member findByUsername(String member);
 }

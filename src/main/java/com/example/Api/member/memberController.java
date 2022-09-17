@@ -1,72 +1,72 @@
 package com.example.Api.member;
 
 
+import com.example.Api.oauth.PrincipalDetails;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/member")
 @Validated
+@RequiredArgsConstructor
 public class memberController {
 
     private final MemberService memberService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MemberRepository memberRepository;
+    private final MemberMapper mapper;
 
-    public memberController(MemberService memberService){
-        this.memberService = memberService;
-    }
 /*
     // 5. 유저 삭제 (회원 탈퇴)
 
 
-//    @PostMapping("/login")// 로그인 로직 구현 예정
-//    public ResponseEntity login(Member member){
-//        return new ResponseEntity<> (member,HttpStatus.CREATED);
-//    }
-
-    @PostMapping // 회원가입
-    @ApiOperation(value = "회원가입")
-    public ResponseEntity signup(@Validated @RequestBody Member member) {
-
-
-        return new ResponseEntity<Member>(member, HttpStatus.OK);
-    }
-    @PatchMapping("/{member-id}")
-    @ApiOperation(value = "회원 정보 수정")// 회원 정보 수정  -- 구체적인 수정 추가 예정
-    public ResponseEntity update(@PathVariable("member-id") @Positive long Id,
-                                 @Valid @RequestBody Member member){
-
-return new ResponseEntity<>(member, HttpStatus.OK);
-    }
-
-
-
-    @GetMapping("/{member-id}")
-    @ApiOperation(value = "마이 페이지")// 유저 상세 페이지
-    public ResponseEntity memberPage(@PathVariable("member-id") @Positive long Id){
-//        Member member1 = new Member(1,"멤버네임","이메일","1234");
-
-        Member member2 = new Member();
-        return new ResponseEntity<>(member2,HttpStatus.ACCEPTED);
-    }
 
 //    @GetMapping("/all") // 모든 유저 조회
 //    public ResponseEntity memberall(@Positive @RequestParam int page){
 //        Page<Member> page1 =
 //        return new ResponseEntity<>(page1,HttpStatus.ACCEPTED);
 //    }
+*/
+@PostMapping("/signup")
+@ApiOperation(value = "회원가입")
+public ResponseEntity signup(@Validated @RequestBody MemberPostDto memberPostDto) {
+    Member member = mapper.memberPostDtoToMember(memberPostDto);
+    member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+    member.setRoles("USER");
+    Member response = memberService.createMember(member);
 
-    @DeleteMapping("/{member-id}")
-    @ApiOperation(value = "회원탈퇴")//회원 탈퇴
-    public ResponseEntity memberDelete(@PathVariable("member-id") @Positive long Id){
-        return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(response , HttpStatus.OK);
+}
+//@PatchMapping("/{member-id}")
+//@ApiOperation(value = "회원 정보 수정")
+//public ResponseEntity update(@Validated @RequestBody MemberPatchDto memberPatchDto){
+//
+//    Member member = mapper.memberPatchDtoToMember(memberPatchDto);
+//    member.setUsername("바뀐이메일");
+//    Member response = memberService.createMember(member);
+//
+//    return new ResponseEntity<>(response,HttpStatus.OK);
+//}
+//    @GetMapping("/{member-id}")
+//    @ApiOperation(value = "마이 페이지")// 유저 상세 페이지
+//    public ResponseEntity memberPage(@PathVariable("member-id") @Positive long id){
+//
+//        Member response = memberService.findMember(id);
+//        response.setRoles("USER");
+//        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+//    }
+    @GetMapping("/test")
+    public String getMyInfo(Principal principal){
+        return principal.toString();
+    }
 
-    }*/
 }

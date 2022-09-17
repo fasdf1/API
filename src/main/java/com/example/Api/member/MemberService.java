@@ -16,4 +16,9 @@ public class MemberService {
     public Member createMember(Member member){
         return memberRepository.save(member);
     }
+    public Member findMember(long id) {
+
+        Member member = new Member(id,"kcd@gmail.com","김코딩","asd");
+        return member;
+    }
 }
