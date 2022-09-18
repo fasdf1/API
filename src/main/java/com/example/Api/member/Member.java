@@ -3,6 +3,7 @@ package com.example.Api.member;
 import com.example.Api.audit.Auditable;
 import com.example.Api.category.Category;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -33,10 +34,7 @@ public class Member extends Auditable {
     @Column
     private long categoryId;
 
-    @Column
-    private LocalDateTime createdAt;
-    @Column
-    private LocalDateTime modifiedAt;
+
     private String roles; // User, MANAGER, ADMIN
 
     public List<String> getRoleList() {
