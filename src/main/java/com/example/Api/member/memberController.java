@@ -56,14 +56,17 @@ public ResponseEntity signup(@Validated @RequestBody MemberPostDto memberPostDto
 //
 //    return new ResponseEntity<>(response,HttpStatus.OK);
 //}
-//    @GetMapping("/{member-id}")
-//    @ApiOperation(value = "마이 페이지")// 유저 상세 페이지
-//    public ResponseEntity memberPage(@PathVariable("member-id") @Positive long id){
-//
+    @GetMapping("/{member-id}")
+    @ApiOperation(value = "마이 페이지")// 유저 상세 페이지
+    public ResponseEntity memberPage(@PathVariable("member-id") @Positive long id){
+
+        String password = bCryptPasswordEncoder.encode("ssss");
+    Member member = new Member(id,"이메일","닉네임",password);
+    member.setRoles("USER");
 //        Member response = memberService.findMember(id);
 //        response.setRoles("USER");
-//        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
-//    }
+        return new ResponseEntity<>(member,HttpStatus.ACCEPTED);
+    }
     @GetMapping("/test")
     public String getMyInfo(Principal principal){
         return principal.toString();

@@ -23,15 +23,20 @@ public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
     private String username;
+    @Column
     private String password;
+    @Column
     private String nickName;
 
+    @Column
+    private long categoryId;
 
-   // private Category category;
-
-
+    @Column
     private LocalDateTime createdAt;
+    @Column
+    private LocalDateTime modifiedAt;
     private String roles; // User, MANAGER, ADMIN
 
     public List<String> getRoleList() {
