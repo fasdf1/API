@@ -67,6 +67,14 @@ public ResponseEntity signup(@Validated @RequestBody MemberPostDto memberPostDto
 //        response.setRoles("USER");
         return new ResponseEntity<>(member,HttpStatus.ACCEPTED);
     }
+
+    @DeleteMapping("/{member-id}")
+    @ApiOperation(value = "회원 탈퇴")// 유저 상세 페이지
+    public ResponseEntity deletMember(@PathVariable("member-id") @Positive long id){
+
+
+        return new ResponseEntity<>("삭제 완료",HttpStatus.OK);
+    }
     @GetMapping("/test")
     public String getMyInfo(Principal principal){
         return principal.toString();

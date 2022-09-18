@@ -3,9 +3,6 @@ package com.example.Api.category;
 
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,17 +15,39 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/category")
 public class CategoryController {
 
-    @PostMapping //카테고리 등록
-    @ApiOperation(value = "카테고리 등록")
-    public ResponseEntity postCategory(@Validated@RequestBody Category category){
+    private final CategoryMapper mapper;
+    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
-        return new ResponseEntity<>(category, HttpStatus.CREATED);
+    public CategoryController(CategoryMapper mapper, CategoryService categoryService, CategoryRepository categoryRepository) {
+        this.mapper = mapper;
+        this.categoryService = categoryService;
+        this.categoryRepository = categoryRepository;
     }
 
-    @PatchMapping("/{category-id}")//카테고리 수정
-    @ApiOperation(value = "카테고리 수정")
-    public ResponseEntity patchCategory(@PathVariable("category-id") @Positive long categoryId, @Valid @RequestBody Category category)
+    @PostMapping //카테고리 등록
+    @ApiOperation(value = "카테고리 등록")
+    public ResponseEntity postCategory(@Validated@RequestBody CategoryPostDto categoryPostDto){
+        Category category = mapper.categoryPostDtoToCategory(categoryPostDto);
+
+        Category response = categoryService.createCategory(category);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+//    @PatchMapping("/{category-id}")//카테고리 수정
+//    @ApiOperation(value = "카테고리 등록")
+//    public ResponseEntity patchCategory(@PathVariable("category-id") @Positive long categoryId @RequestBody CategoryPostDto categoryPostDto){
+//        Category category = mapper.categoryPostDtoToCategory(categoryPostDto);
+//
+//        Category response = categoryService.createCategory(category);
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+//    }
+
+    @GetMapping   // 카테고리 조회
+    @ApiOperation(value = "카테고리 조회")
+    public ResponseEntity findCategory(@PathVariable("category-id") @Positive long categoryId)
     {
+        Category category = categoryService.findCategory(categoryId);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
