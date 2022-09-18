@@ -64,5 +64,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Gson gson = new Gson();
         String jsonString = gson.toJson(map);
         response.getWriter().println(jsonString);
+
     }
 }
