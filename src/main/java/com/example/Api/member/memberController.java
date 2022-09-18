@@ -80,4 +80,12 @@ public ResponseEntity signup(@Validated @RequestBody MemberPostDto memberPostDto
         return principal.toString();
     }
 
+    @PostMapping("/pbti/{category-id}")
+    public ResponseEntity pbti(Principal principal ,@PathVariable("category-id") @Positive long id){
+
+    Member pbitMember = memberRepository.findByUsername(principal.getName());
+        pbitMember.setCategoryId(id);
+    memberRepository.save(pbitMember);
+    return new ResponseEntity<>("등록 완료", HttpStatus.OK);
+    }
 }
