@@ -30,12 +30,18 @@ import java.util.*;
 @Validated
 public class ProductController {
 
+    // test
     private final ProductMapper productMapper;
+    private final ProductService productService;
+
     private final int size = 10;
     private List<Product>  products = new ArrayList<>();
-    public ProductController(ProductMapper productMapper ){
+    public ProductController(ProductMapper productMapper, ProductService productService){
         this.productMapper = productMapper;
+        this.productService = productService;
+
     }
+    //url/2
 
 
     /*
@@ -45,14 +51,7 @@ public class ProductController {
      */
     @ApiOperation(value = "Excel File 등록(상품 등록)",
             notes = "✅ Excel File을 등록합니다.\n - \n " )
-    /*@PostMapping("/{member-id}")
-    public List<ExcelData> postProducts(@PathVariable("member-id") @Positive long memberId,
-                                        @RequestPart("file") MultipartFile file) throws IOException {*/
-    //중복 상품 검사 기능 : 개발 기간에 구현 예정
-    // 기존 DB에 저장된 productName들을 읽어와 List를 생성
-    // 엑셀 파일의 productName이 List에 담겨져 있다면 다음 반복으로 continue
-    // 등록되지 않은 ProductName이라면 저장
-    @PostMapping("/{member-id}")
+    @PostMapping("admin/{member-id}")
     public ResponseEntity postProducts(@PathVariable("member-id") @Positive long memberId,
                                      @RequestPart("file") MultipartFile file) throws IOException {
 
@@ -85,22 +84,43 @@ public class ProductController {
 
             ExcelData data = new ExcelData();
 
-            data.setProductId(i);
+            /*data.setProductId(i);*/
             data.setImageURL(row.getCell(0).getStringCellValue());
             data.setProductName(row.getCell(1).getStringCellValue());
-            String priceValue = row.getCell(2).getStringCellValue().replaceAll(",","");
-            // 크롤링한 가격은 텍스트 형식으로 되어 있는 숫자, 3,500에 있는 , 제거
-           /* String priceValue2 = priceValue.replaceAll(",","");*/
-            long  price = Long.parseLong(priceValue);
+            /*String priceValue = row.getCell(2).getStringCellValue().replaceAll(",","");*/
+            String priceValue = row.getCell(2).getStringCellValue();
+            String parsedValue = "";
+            long price = 0;
+            // 크롤링한 가격은 텍스트 형식으로 되어 있는 숫자, 문자열 가격에 "원"이나 ","가 있으면 모두 제거
+            if(priceValue.contains(",") || priceValue.contains("원")){
+                parsedValue = priceValue.replaceAll("[,원]","");
+                System.out.println(parsedValue);
+                price = Long.parseLong(parsedValue);
+               /* System.out.println(price);*/
+            }
+            else{
+                price = Long.parseLong(priceValue);
+                /*System.out.println(price);*/
+            }
+
             BigDecimal seq = new BigDecimal(price);
             data.setCategoryId((long)row.getCell(3).getNumericCellValue());
             data.setCompany(row.getCell(4).getStringCellValue());
             data.setPrice(seq);
             data.setCreatedAt(LocalDateTime.now());
-            dataList.add(data);
-            Product product = productMapper.excelDataToProduct(data);
-            product.setId(data.getProductId());
-            productList.add(product);
+
+            //중복 삼품인지 검사 필요
+            if(productService.checkDuplicatedProduct(data.getProductName())){
+                continue;
+            }
+            else{
+                Product product = productMapper.excelDataToProduct(data);
+                productService.createProduct(product);
+
+                dataList.add(data);
+                productList.add(product);
+            }
+
         }
 
         if(dataList.isEmpty()){
@@ -122,7 +142,7 @@ public class ProductController {
 */
     @ApiOperation(value = "상품 정보 조회(productName)",
             notes = "✅ 입력받은 상품명에 해당하는 상품의 정보를 조회합니다.\n - \n " )
-    @GetMapping("/{member-id}")
+    @GetMapping("admin/{member-id}")
     public ResponseEntity getProductByProductName(@PathVariable("member-id") @Positive long memberId,
                                 @Parameter(name = "productName", description = "햄)치치버거") @RequestParam String productName){
         boolean isAdmin = checkAdminId(memberId);
@@ -131,8 +151,9 @@ public class ProductController {
         }
         Category category = new Category(11L,"버거");
         List<Review> reviewList = new ArrayList<>();
-        Product product = new Product(1L,"https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801068404999.jpg",productName,new BigDecimal(3000),
-                                        11L, "CU",11,1,3,category,reviewList,LocalDateTime.now(),LocalDateTime.now());
+        Product product = productService.findVerifiedProductName(productName);
+        /*product.setCategory(category);
+        product.setReviewList(reviewList);*/
 
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
@@ -143,7 +164,7 @@ public class ProductController {
 */
     @ApiOperation(value = "상품 정보 수정",
             notes = "✅ 상품 정보를 수정합니다.\n - \n " )
-    @PatchMapping("/{member-id}")
+    @PatchMapping("admin/{member-id}")
     public ResponseEntity patchProduct(@PathVariable("member-id") @Positive long memberId,
                                 @RequestParam long productId,
                                 @Valid @RequestBody ProductPatchDto productPatchDto){
@@ -153,15 +174,13 @@ public class ProductController {
         }
         Category category = new Category(7L,"adf");
         List<Review> reviewList = new ArrayList<>();
-        Product product = new Product(1L,"asdfad",
-                                       "adfadf" ,new BigDecimal(5000),5L,"CU",38,20,7,category,reviewList,
-                                        LocalDateTime.now(),LocalDateTime.now());
+        Product product = new Product();
         product.setId(productId);
         product.setImageURL(productPatchDto.getImageURL());
         product.setProductName(productPatchDto.getProductName());
         product.setPrice(new BigDecimal(9900));
         product.setCategoryId(productPatchDto.getCategoryId());
-        product.setCategory(new Category(productPatchDto.getCategoryId(), "도시락"));
+        /*product.setCategory(new Category(productPatchDto.getCategoryId(), "도시락"));*/
 
 
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -172,7 +191,7 @@ public class ProductController {
     */
     @ApiOperation(value = "상품 삭제",
             notes = "✅ 입력받은 productId에 해당하는 상품을 삭제합니다.\n - \n " )
-    @DeleteMapping("/{member-id}")
+    @DeleteMapping("admin/{member-id}")
     public ResponseEntity deleteProduct(@PathVariable("member-id") @Positive long memberId,
                                        @RequestParam long productId){
 
@@ -334,5 +353,7 @@ public class ProductController {
         }
     }
 
-
+    //feature2 테스트
+    //dev테스트
+    //dev테스트 2
 }

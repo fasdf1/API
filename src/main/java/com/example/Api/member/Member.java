@@ -1,45 +1,56 @@
 package com.example.Api.member;
 
+import com.example.Api.audit.Auditable;
 import com.example.Api.category.Category;
 import lombok.*;
-import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
-
-
+public class Member extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    //@Email
-    private String email;
-    private String nickName;
+    @Column
+    private String username;
+    @Column
     private String password;
-    private String role;
+    @Column
+    private String nickName;
 
-    private Category category = null;
+    @Column
+    private long categoryId;
 
-//    private List<productHearts> productHearts = new ArrayList<>();
-//    private List<reviewHearts> reviewHearts = new ArrayList<>();
-
-//    private long points;
-//    private String grade;
-    //구현 아직 화정되지 않음
-    private LocalDate createdAt;
+    private String profile;
 
 
+    private String roles; // User, MANAGER, ADMIN
 
+    public List<String> getRoleList() {
+        if(this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
+
+    public Member(long id,String username,String nickName,String password){
+
+        this.id = id;
+        this.username = username;
+        this.nickName = nickName;
+        this.password = password;
+    }
 }
