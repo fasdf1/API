@@ -20,6 +20,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+
     public boolean checkDuplicatedProduct(String productName){
         boolean result = false;
         Optional<Product> optionalProduct = productRepository.findByProductName(productName);
@@ -27,6 +28,21 @@ public class ProductService {
             result = true;
         }
         return result;
+    }
+
+    public Product findVerifiedProductName(String productName) {
+        Optional<Product> optionalProduct = productRepository.findByProductName(productName);
+        Product findProduct =
+                optionalProduct.orElseThrow(() ->
+                        new RuntimeException("Product not found"));
+        return findProduct;
+    }
+    public Product findVerifiedProductId(long productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product findProduct =
+                optionalProduct.orElseThrow(() ->
+                        new RuntimeException("Product not found"));
+        return findProduct;
     }
 
 
