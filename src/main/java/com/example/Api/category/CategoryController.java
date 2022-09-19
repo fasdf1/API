@@ -34,14 +34,14 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-//    @PatchMapping("/{category-id}")//카테고리 수정
-//    @ApiOperation(value = "카테고리 등록")
-//    public ResponseEntity patchCategory(@PathVariable("category-id") @Positive long categoryId @RequestBody CategoryPostDto categoryPostDto){
-//        Category category = mapper.categoryPostDtoToCategory(categoryPostDto);
-//
-//        Category response = categoryService.createCategory(category);
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
-//    }
+    @PatchMapping("/{category-id}")//카테고리 수정
+    @ApiOperation(value = "카테고리 수정")
+    public ResponseEntity patchCategory(@PathVariable("category-id") @Positive long categoryId ,@RequestBody String categoryName){
+
+        Category category = new Category(categoryId,categoryName);
+
+        return new ResponseEntity<>(category, HttpStatus.CREATED);
+    }
 
     @GetMapping   // 카테고리 조회
     @ApiOperation(value = "카테고리 조회")

@@ -34,6 +34,8 @@ public class Member extends Auditable {
     @Column
     private long categoryId;
 
+    private String profile;
+
 
     private String roles; // User, MANAGER, ADMIN
 

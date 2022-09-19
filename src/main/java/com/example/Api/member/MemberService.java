@@ -47,4 +47,11 @@ public class MemberService {
         Member member = new Member(id,"kcd@gmail.com","김코딩","asd");
         return member;
     }
+    public void imgUpdate(long id , String photo){
+        String password = bCryptPasswordEncoder.encode("ssss");
+        Member member1 = new Member(id,"이메일","닉네임",password);
+        member1.setRoles("USER");
+member1.setProfile(photo);
+memberRepository.save(member1);
+    }
 }
