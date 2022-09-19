@@ -51,7 +51,7 @@ public class ProductController {
      */
     @ApiOperation(value = "Excel File 등록(상품 등록)",
             notes = "✅ Excel File을 등록합니다.\n - \n " )
-    @PostMapping("/{member-id}")
+    @PostMapping("admin/{member-id}")
     public ResponseEntity postProducts(@PathVariable("member-id") @Positive long memberId,
                                      @RequestPart("file") MultipartFile file) throws IOException {
 
@@ -140,9 +140,9 @@ public class ProductController {
 : 상품 Id 찾기
   관리자가 수정하거나 삭제할 상품의 ID를 찾기 위해 필요
 */
- /*   @ApiOperation(value = "상품 정보 조회(productName)",
+    @ApiOperation(value = "상품 정보 조회(productName)",
             notes = "✅ 입력받은 상품명에 해당하는 상품의 정보를 조회합니다.\n - \n " )
-    @GetMapping("/{member-id}")
+    @GetMapping("admin/{member-id}")
     public ResponseEntity getProductByProductName(@PathVariable("member-id") @Positive long memberId,
                                 @Parameter(name = "productName", description = "햄)치치버거") @RequestParam String productName){
         boolean isAdmin = checkAdminId(memberId);
@@ -151,19 +151,20 @@ public class ProductController {
         }
         Category category = new Category(11L,"버거");
         List<Review> reviewList = new ArrayList<>();
-        Product product = new Product(1L,"https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801068404999.jpg",productName,new BigDecimal(3000),
-                                        11L, "CU",11,1,3,category,reviewList,LocalDateTime.now(),LocalDateTime.now());
+        Product product = productService.findVerifiedProductName(productName);
+        /*product.setCategory(category);
+        product.setReviewList(reviewList);*/
 
         return new ResponseEntity<>(product, HttpStatus.OK);
-    }*/
+    }
 
 /*
 # PATCH("/{member-id}") , Request Parmeters : long productId
 : 관리자가 상품 정보 수정
 */
-/*    @ApiOperation(value = "상품 정보 수정",
+    @ApiOperation(value = "상품 정보 수정",
             notes = "✅ 상품 정보를 수정합니다.\n - \n " )
-    @PatchMapping("/{member-id}")
+    @PatchMapping("admin/{member-id}")
     public ResponseEntity patchProduct(@PathVariable("member-id") @Positive long memberId,
                                 @RequestParam long productId,
                                 @Valid @RequestBody ProductPatchDto productPatchDto){
@@ -173,26 +174,24 @@ public class ProductController {
         }
         Category category = new Category(7L,"adf");
         List<Review> reviewList = new ArrayList<>();
-        Product product = new Product(1L,"asdfad",
-                                       "adfadf" ,new BigDecimal(5000),5L,"CU",38,20,7,category,reviewList,
-                                        LocalDateTime.now(),LocalDateTime.now());
+        Product product = new Product();
         product.setId(productId);
         product.setImageURL(productPatchDto.getImageURL());
         product.setProductName(productPatchDto.getProductName());
         product.setPrice(new BigDecimal(9900));
         product.setCategoryId(productPatchDto.getCategoryId());
-        product.setCategory(new Category(productPatchDto.getCategoryId(), "도시락"));
+        /*product.setCategory(new Category(productPatchDto.getCategoryId(), "도시락"));*/
 
 
         return new ResponseEntity<>(product, HttpStatus.OK);
-    }*/
+    }
     /*
     # DELETE("/{member-id}") , Request Parmeters : long productId
     : 관리자가 상품 삭제
     */
     @ApiOperation(value = "상품 삭제",
             notes = "✅ 입력받은 productId에 해당하는 상품을 삭제합니다.\n - \n " )
-    @DeleteMapping("/{member-id}")
+    @DeleteMapping("admin/{member-id}")
     public ResponseEntity deleteProduct(@PathVariable("member-id") @Positive long memberId,
                                        @RequestParam long productId){
 
